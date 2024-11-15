@@ -1,0 +1,66 @@
+
+
+
+* {
+	font-family: Pixel Operator, ohsnap7x14ricons ;
+	font-size: 16px;
+	border:none;
+	
+	
+}
+
+
+window#waybar {
+	background: rgba(0,62,234,1);
+	color: white;
+	
+}
+
+#workspaces button.active{
+	color: white;
+}
+
+#workspaces button {
+	color: #9aa5ac
+}
+
+#workspaces button:hover{
+    
+	background:  rgba(0,62,234,1);
+	box-shadow: 0px 0px;
+	transition:none;
+	font-size:16px;
+	text-shadow:none
+	}
+
+
+
+#wireplumber, #network,#temperature,#cpu,#memory,#battery {
+
+	padding: 0 2px;
+ 
+	
+	
+}
+
+#battery {
+	margin-right:  5px;
+}
+
+
+#custom-firefox {
+	font-family: Awesome;
+	font-size: 14px;
+	margin-left: 5px;
+	margin-right: 10px;
+	
+}
+
+#custom-nemo {
+	font-size: 14px;
+}
+
+#language {
+	margin-left: 10px;
+}
+
