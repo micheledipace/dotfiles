@@ -1,0 +1,7 @@
+[General]
+char=61743
+rtl=false
+selectedFont=Font Awesome 6 Free,17,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+
+[MainWindow]
+ToolBarsMovable=Disabled

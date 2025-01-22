@@ -1,0 +1,137 @@
+// -*- mode: jsonc -*-
+//[
+{
+   // "layer": "top", // Waybar at top layer
+    "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 35, // Waybar height (to be removed for auto height)
+   // "width": 300, // Waybar width
+    "spacing":10, // Gaps between modules (4px)
+    "margin-left": 5,
+    "margin-right": 5,
+    "margin-bottom": 5,
+    // Choose the order of the modules
+    "modules-left": ["wlr/taskbar"
+         ],
+    "modules-center": [
+        ],
+    "modules-right": [
+
+
+       "clock",
+
+        "pulseaudio",
+	"backlight",
+        "network",
+        
+        "battery"
+        
+        
+    ],
+    // Modules configuration
+           "clock": {
+         "timezone": "Europe/Rome",
+
+       // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%a %d %b, %H:%M} ",
+        "locale": "C"
+    },
+          "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "rotate": +1,
+        "format": "{icon}",
+      //  "format-full": "BAT [{capacity}%]",
+      //  "format-charging": "ON CHARGE [{capacity}%]",
+      //  "format-plugged": "BAT [{capacity}%]",
+        "format-alt": "{capacity}% {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""],
+       // "tooltip-format": "{capacity}% {icon}"
+    },
+       "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi" : " 🖧 " ,
+	"format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{essid}",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "🌍",
+        //"format-alt": "{essid}"
+    },
+    "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon}",
+    "format-icons": ["☾","☼"],
+    "tooltip" : true,
+    "tooltip-format": "{percent}%"
+    
+},
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{icon}",
+        "format-bluetooth": "{volume}% {icon} ",
+        "format-bluetooth-muted": " {icon} ",
+        "format-muted": " {format_source}",
+       //  "format-source": "{volume}% ",
+       // "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["🎜",]
+        },
+        "on-click": "pavucontrol"
+    },
+
+        "wlr/taskbar" : {
+            "format": "{app_id}",
+            "icon-size": 14,
+            "icon-theme" : "Haiku",
+            "tooltip-format":"{name}",
+            "on-click":"minimize-raise",
+            "rewrite": {
+              "firefox" : "",
+              "foot" : "",
+              "nemo" : ""
+              
+              
+            }
+
+}
+   },
+
+
+//{"name":"windows",
+//   "layer": "bottom", // Waybar at top layer
+//    "position": "bottom", // Waybar position (top|bottom|left|right)
+//    "height": 35, // Waybar height (to be removed for auto height)
+   // "width": 300, // Waybar width
+//    "spacing":0, // Gaps between modules (4px)
+ //   "margin-left": 5,
+//    "margin-right": 600,
+ //   "margin-bottom": 0,
+    // Choose the order of the modules
+//    "modules-left": ["wlr/taskbar"
+ //        ],
+
+//        "wlr/taskbar" : {
+ //           "format": "{title}",
+   //         "icon-size": 14,
+     //       "icon-theme" : "Haiku",
+       //     "tooltip-format":"{title}",
+         //   "on-click":"activate"
+
+//}
+//}
+//]
