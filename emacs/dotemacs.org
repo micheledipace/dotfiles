@@ -1,0 +1,199 @@
+#+TITLE: Configuration
+#+AUTHOR: Michele Dipace
+#+PROPERTY: header-args :tangle ./dotemacs.el
+
+Importante specificare *PROPERTY* e non properties
+Gli /header-args/ vengono aggiornati ad ogni apertura del file a quanto pare
+* Startup
+#+begin_src emacs-lisp
+  ;;do not ask to follow symlinks (org)
+  (setq vc-follow-symlinks t)
+  (setq window-system nil)
+  (setq os-packages-path "/Users/forrest/repos/tools/emacs_packages")
+  (prefer-coding-system 'utf-8-unix)
+#+end_src
+#+begin_src emacs-lisp
+  (add-to-list 'load-path os-packages-path)
+#+end_src
+* My functions
+automatizza la funzione /org-babel-tangle/ con l'hook dopo il salvataggio di *questo* org-file
+#+begin_src emacs-lisp
+  (defun my/tangle-dotfiles ()
+    (interactive)
+    (when (equal (buffer-file-name)
+  	       (expand-file-name "/Users/forrest/repos/dotfiles/dotemacs.org"))
+      (org-babel-tangle)
+      (message "Dotfile tangled")))
+#+end_src
+automatizza l'exporting degli _html_ esportati con ox-twbs
+copy & paste dal github.
+#+begin_src emacs-lisp
+
+  (defun my/org-publish-buffer ()
+  (interactive)
+  (save-buffer)
+  (save-excursion (org-publish-current-file))
+  (let* ((proj (org-publish-get-project-from-filename buffer-file-name))
+         (proj-plist (cdr proj))
+         (rel (file-relative-name buffer-file-name
+                                  (plist-get proj-plist :base-directory)))
+         (dest (plist-get proj-plist :publishing-directory)))
+    (browse-url (concat "file://"
+                        (file-name-as-directory (expand-file-name dest))
+                        (file-name-sans-extension rel)
+                        ".html"))))
+#+end_src
+* Hooks
+#+begin_src emacs-lisp
+  (add-hook 'after-save-hook #'my/tangle-dotfiles)
+  ;; (add-hook 'after-save-hook #'my/org-publish-buffer)
+#+end_src
+
+* General
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  (setq-default fill-column 70)
+
+  (setq undo-limit 20000000)
+  (setq undo-strong-limit 40000000)
+
+  (setq scroll-step 3)
+  (setq line-number-mode t)
+  (setq inhibit-startup-screen t)
+
+  (display-time)
+   (scroll-bar-mode -1)
+   (menu-bar-mode -1)
+   (tool-bar-mode 0)
+
+   (column-number-mode)
+
+  (global-visual-line-mode)
+  ;; mostra il numero della colonna
+  (use-package display-line-numbers
+    :init (global-display-line-numbers-mode t))
+ #+end_src
+* Packages
+ #+begin_src emacs-lisp
+   (package-initialize)
+   (require 'use-package)
+ #+end_src
+ #+begin_src emacs-lisp
+   (use-package package
+     :config
+     (setq package-archive-priorities
+   	'(("melpa-stable". 2)
+   	  ("MELPA" . 1)
+   	  ("gnu" . 0)))
+
+     (setq package-archives
+   	'(("melpa-stable" . "https://stable.melpa.org/packages/")
+   	  ("MELPA" . "https://melpa.org/packages/")
+   	  ("gnu" . "https://elpa.gnu.org/packages/"))))
+
+
+ #+end_src
+** Terminal
+ #+begin_src emacs-lisp
+   (use-package vterm
+     :ensure t
+     :defer t)
+ #+end_src
+** Themes
+ #+begin_src emacs-lisp
+    (use-package doom-themes
+      :ensure t
+      :init
+      (load-theme 'doom-gruvbox t)
+      
+      :config (doom-themes-org-config)
+        )
+
+   (use-package doom-modeline
+     :ensure t
+     :defer t
+     :init (doom-modeline-mode 1))
+
+   (use-package nerd-icons
+     :ensure t)
+
+
+    (use-package beacon
+         :ensure t
+         :defer t
+         :init (beacon-mode 1))
+ #+end_src
+** Anki
+#+begin_src emacs-lisp
+  ;; (package-vc-install
+  ;;  '(anki-editor . (:url "https://github.com/anki-editor/anki-editor")))
+
+
+#+end_src
+** Search
+ #+begin_src emacs-lisp
+
+   ;; alcuni snippet per ivy 
+      (use-package counsel
+        :ensure t
+        :after ivy
+        :config (counsel-mode 1))
+   ;; permette l'utilizzo migliorato di minibuffer per la ricerca
+   ;; custom é al pari setopt ed é consigliabile utilizzarlo n
+       (use-package ivy
+         :ensure t
+         :bind (("C-c C-r" . ivy-resume)
+      	  ("C-c B" . ivy-switch-buffer-other-window))
+         :custom ((ivy-use-virtual-buffers t)
+      	  (ivy-count-format "(%d/%d) ")
+       	  )
+         :init (ivy-mode)		  
+         )
+
+      (use-package swiper
+        :bind ("C-s" . swiper-isearch))
+ #+end_src
+
+* Org-mode
+** Org-Capture
+#+begin_src emacs-lisp
+  ;; configurazione spartana per alcuni template di org files WIP
+  (use-package org-capture
+    :after org
+    :bind ("C-c c" . org-capture)
+    :custom ((org-directory "~/repos/org")
+  	   (org-capture-templates
+  	    '(("d" "Deutsch A2" entry (file "tedesco.org")
+  	       "* %^{Inserisci il titolo della lezione}\n%?")
+  	    ("q" "Quotes" entry (file+headline "quotes.org" "Quotes")
+  	     "* %^{Inserisci la fonte}\n#+AUTHOR: %^{Inserisci l'autore}\n#+TIMESTAMP: %t\n#+begin_quote\n%?\n#+end_quote")))))
+
+#+end_src
+** Org
+#+begin_src emacs-lisp
+  (use-package org
+    :custom (org-startup-indented t))
+#+end_src
+** Org-Agenda
+#+begin_src emacs-lisp
+  (use-package org-agenda
+    :after org
+    :custom ((org-agenda-files
+  	    '("uni.org"))
+  	   (org-return-follows-link t)))
+#+end_src
+** Org-publish
+#+begin_src emacs-lisp
+  (use-package org
+    :custom (org-publish-project-alist
+  	   '(("org-notes"
+  	      :base-directory "~/repos/org/"
+  	      :base-extension "org"
+  	      :publishing-directory "~/repos/public_html"
+  	      :publishing-function org-twbs-publish-to-html
+  	      :wiht-sub-superscript nil
+  	      ))))
+#+end_src
+
+
+
